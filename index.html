@@ -65,7 +65,13 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
 .list-item:last-child { border-bottom: none; }
 .item-sub { font-size: 13px; color: var(--ink-soft); display: block; margin-top: 4px; }
 .badge-danger { background: rgba(196, 107, 138, 0.2); color: var(--danger); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-.btn-add { background: var(--acc); color: #000; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; }
+
+/* BUTTONS */
+.btn-add { background: var(--acc); color: #000; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+.btn-clear { background: transparent; color: var(--ink-soft); border: 1px solid var(--line); padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+.btn-clear:hover { color: var(--danger); border-color: var(--danger); }
+.btn-del { background: transparent; border: none; color: var(--ink-soft); cursor: pointer; font-size: 18px; padding: 0 8px; transition: color 0.2s; }
+.btn-del:hover { color: var(--danger); }
 
 /* CHECKLISTS & TASKS */
 .task-item { display: flex; align-items: flex-start; gap: 16px; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: background 0.2s; }
@@ -74,13 +80,14 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
 .task-item.completed .task-checkbox { background: var(--acc); border-color: var(--acc); }
 .task-item.completed .task-checkbox svg { display: block; stroke: #000; }
 .task-checkbox svg { display: none; width: 18px; height: 18px; stroke-width: 3; }
-.task-text { font-size: 18px; transition: color 0.2s; }
+.task-text { font-size: 18px; transition: color 0.2s; flex: 1; }
 .task-item.completed .task-text { color: var(--ink-soft); text-decoration: line-through; }
 .task-assignee { font-size: 12px; color: var(--acc); margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+.task-time { font-size: 11px; color: var(--success); margin-top: 4px; }
 
 /* MANAGER OVERLAY */
-.manager-only { display: none; }
-body.is-manager .manager-only { display: flex; }
+.manager-only { display: none !important; }
+body.is-manager .manager-only { display: flex !important; }
 
 /* MODAL */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(4px); }
@@ -92,6 +99,12 @@ body.is-manager .manager-only { display: flex; }
 .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
 .btn-cancel { background: transparent; border: 1px solid var(--line); color: var(--ink); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 .btn-save { background: var(--acc); border: none; color: #000; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+
+/* STAFF LIST */
+.staff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+.staff-card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); padding: 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
+.staff-card strong { font-size: 16px; }
+.staff-role { font-size: 12px; color: var(--acc); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-top: 4px; }
 
 /* TABLET LANDSCAPE SPECIFIC */
 @media (max-width: 1024px) {
@@ -108,17 +121,21 @@ body.is-manager .manager-only { display: flex; }
   <div class="logo">The Leo</div>
   <div class="logo-sub">Staff Ops</div>
 
-  <div class="nav-item active" onclick="switchTab('dashboard', this)">
+  <div class="nav-item active" onclick="switchTab('dashboard', 'Shift Dashboard', this)">
     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
     Dashboard
   </div>
-  <div class="nav-item" onclick="switchTab('checklists', this)">
+  <div class="nav-item" onclick="switchTab('checklists', 'Daily Checklists', this)">
     <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
     Checklists
   </div>
-  <div class="nav-item" onclick="switchTab('tasks', this)">
+  <div class="nav-item" onclick="switchTab('tasks', 'Staff Assignments', this)">
     <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
     Staff Tasks
+  </div>
+  <div class="nav-item" onclick="switchTab('staff', 'Staff Roster', this)">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Roster
   </div>
 
   <div class="spacer"></div>
@@ -144,7 +161,10 @@ body.is-manager .manager-only { display: flex; }
       <div class="card">
         <div class="card-title">
           86 Board (Out of Stock)
-          <button class="btn-add manager-only" onclick="openModal('86')">+ Add</button>
+          <div class="manager-only" style="gap: 8px;">
+            <button class="btn-add" onclick="openModal('86')">+ Add</button>
+            <button class="btn-clear" onclick="clear86()">Clear</button>
+          </div>
         </div>
         <div id="board-86-list"></div>
       </div>
@@ -153,7 +173,10 @@ body.is-manager .manager-only { display: flex; }
       <div class="card">
         <div class="card-title">
           Today's Specials
-          <button class="btn-add manager-only" onclick="openModal('special')">+ Add</button>
+          <div class="manager-only" style="gap: 8px;">
+            <button class="btn-add" onclick="openModal('special')">+ Add</button>
+            <button class="btn-clear" onclick="clearSpecials()">Clear</button>
+          </div>
         </div>
         <div id="specials-list"></div>
       </div>
@@ -162,13 +185,22 @@ body.is-manager .manager-only { display: flex; }
 
   <!-- CHECKLISTS VIEW -->
   <div id="checklists" class="view">
+    <div class="manager-only" style="justify-content: flex-end; margin-bottom: 16px;">
+      <button class="btn-clear" onclick="resetChecklists()">Reset All Checklists</button>
+    </div>
     <div class="grid-2">
       <div class="card">
-        <div class="card-title">Opening Checklist</div>
+        <div class="card-title">
+          Opening Checklist
+          <button class="btn-add manager-only" onclick="openModal('opening')">+ Add Item</button>
+        </div>
         <div id="opening-list"></div>
       </div>
       <div class="card">
-        <div class="card-title">Closing Checklist</div>
+        <div class="card-title">
+          Closing Checklist
+          <button class="btn-add manager-only" onclick="openModal('closing')">+ Add Item</button>
+        </div>
         <div id="closing-list"></div>
       </div>
     </div>
@@ -185,21 +217,30 @@ body.is-manager .manager-only { display: flex; }
     </div>
   </div>
 
+  <!-- STAFF ROSTER VIEW -->
+  <div id="staff" class="view">
+    <div class="card" style="max-width: 800px; margin: 0 auto;">
+      <div class="card-title">
+        Employee Roster
+        <button class="btn-add manager-only" onclick="openModal('staff')">+ Add Employee</button>
+      </div>
+      <div id="staff-list" class="staff-grid"></div>
+    </div>
+  </div>
+
 </div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <h2 id="modal-title">Add Item</h2>
-    <input type="text" id="modal-input-1" placeholder="Item name...">
+    <input type="text" id="modal-input-1" placeholder="Name...">
     <input type="text" id="modal-input-2" placeholder="Details (optional)...">
     
     <div id="assignee-container" style="display: none;">
       <select id="modal-assignee">
         <option value="">Unassigned</option>
-        <option value="Sarah (Server)">Sarah (Server)</option>
-        <option value="Mike (Bar)">Mike (Bar)</option>
-        <option value="Alex (Host)">Alex (Host)</option>
+        <!-- Populated by JS -->
       </select>
     </div>
 
@@ -214,28 +255,26 @@ body.is-manager .manager-only { display: flex; }
 // --- INITIAL DATA (Mock Database) ---
 const defaultData = {
   eightySix: [
-    { id: 1, name: "Oysters", detail: "Ran out at 7pm", time: "7:15 PM" },
-    { id: 2, name: "Tuna Crudo", detail: "No tuna delivery", time: "5:00 PM" }
+    { id: 1, name: "Oysters", detail: "Ran out at 7pm", time: "7:15 PM" }
   ],
   specials: [
-    { id: 1, name: "Halibut Special", detail: "Tuscan kale, chickpeas, saffron aioli" },
-    { id: 2, name: "32oz Porterhouse", detail: "For 2 people, 25oz meat" }
+    { id: 1, name: "Halibut Special", detail: "Tuscan kale, chickpeas, saffron aioli" }
   ],
   opening: [
-    { id: 1, text: "Fill 8 water jugs with ice", completed: true },
-    { id: 2, text: "Set tables with gold cutlery", completed: false },
-    { id: 3, text: "Check candle levels (min 30%)", completed: false },
-    { id: 4, text: "Wipe down menus", completed: false }
+    { id: 1, text: "Fill 8 water jugs with ice", completed: false },
+    { id: 2, text: "Set tables with gold cutlery", completed: false }
   ],
   closing: [
-    { id: 5, text: "Empty all trash and recycling", completed: false },
-    { id: 6, text: "Wipe down espresso machine", completed: false },
-    { id: 7, text: "Count cash drawer", completed: false }
+    { id: 3, text: "Empty all trash and recycling", completed: false },
+    { id: 4, text: "Wipe down espresso machine", completed: false }
   ],
   tasks: [
-    { id: 1, text: "Polish all wine glasses", assignee: "Sarah (Server)", completed: false },
-    { id: 2, text: "Restock bar fridge", assignee: "Mike (Bar)", completed: false },
-    { id: 3, text: "Roll cutlery for tomorrow", assignee: "Alex (Host)", completed: false }
+    { id: 1, text: "Polish all wine glasses", assignee: "Sarah", completed: false, completedBy: "", completedAt: "" }
+  ],
+  staff: [
+    { id: 1, name: "Sarah", role: "Server" },
+    { id: 2, name: "Mike", role: "Bartender" },
+    { id: 3, name: "Alex", role: "Host" }
   ]
 };
 
@@ -254,7 +293,10 @@ function render() {
         <strong>${item.name}</strong>
         <span class="item-sub">${item.detail}</span>
       </div>
-      <span class="badge-danger">${item.time}</span>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span class="badge-danger">${item.time}</span>
+        <button class="btn-del manager-only" onclick="deleteItem('86', ${item.id})">×</button>
+      </div>
     </div>
   `).join('') || '<div style="color:var(--ink-soft); font-style:italic;">Nothing currently 86\'d</div>';
 
@@ -266,24 +308,26 @@ function render() {
         <strong>${item.name}</strong>
         <span class="item-sub">${item.detail}</span>
       </div>
+      <button class="btn-del manager-only" onclick="deleteItem('special', ${item.id})">×</button>
     </div>
-  `).join('');
+  `).join('') || '<div style="color:var(--ink-soft); font-style:italic;">No specials added today</div>';
 
   // Checklists
-  const renderChecklist = (listId, dataArray) => {
+  const renderChecklist = (listId, dataArray, type) => {
     const el = document.getElementById(listId);
     el.innerHTML = dataArray.map(item => `
-      <div class="task-item ${item.completed ? 'completed' : ''}" onclick="toggleChecklist(${item.id}, '${listId}')">
+      <div class="task-item ${item.completed ? 'completed' : ''}" onclick="toggleChecklist(${item.id}, '${type}')">
         <div class="task-checkbox">
           <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <div class="task-text">${item.text}</div>
+        <button class="btn-del manager-only" onclick="event.stopPropagation(); deleteItem('${type}', ${item.id})">×</button>
       </div>
-    `).join('');
+    `).join('') || '<div style="color:var(--ink-soft); font-style:italic;">No tasks</div>';
   };
 
-  renderChecklist('opening-list', appData.opening);
-  renderChecklist('closing-list', appData.closing);
+  renderChecklist('opening-list', appData.opening, 'opening');
+  renderChecklist('closing-list', appData.closing, 'closing');
 
   // Tasks
   const tasksList = document.getElementById('tasks-list');
@@ -295,7 +339,21 @@ function render() {
       <div class="task-text">
         ${item.text}
         ${item.assignee ? `<div class="task-assignee">Assigned to: ${item.assignee}</div>` : ''}
+        ${item.completedBy ? `<div class="task-time">✓ Completed by ${item.completedBy} at ${item.completedAt}</div>` : ''}
       </div>
+      <button class="btn-del manager-only" onclick="event.stopPropagation(); deleteItem('task', ${item.id})">×</button>
+    </div>
+  `).join('') || '<div style="color:var(--ink-soft); font-style:italic;">No tasks assigned</div>';
+
+  // Staff Roster
+  const staffList = document.getElementById('staff-list');
+  staffList.innerHTML = appData.staff.map(person => `
+    <div class="staff-card">
+      <div>
+        <strong>${person.name}</strong>
+        <span class="staff-role">${person.role}</span>
+      </div>
+      <button class="btn-del manager-only" onclick="deleteItem('staff', ${person.id})">×</button>
     </div>
   `).join('');
 
@@ -304,8 +362,8 @@ function render() {
 }
 
 // --- ACTIONS ---
-function toggleChecklist(id, listId) {
-  const list = listId === 'opening-list' ? appData.opening : appData.closing;
+function toggleChecklist(id, type) {
+  const list = type === 'opening' ? appData.opening : appData.closing;
   const item = list.find(i => i.id === id);
   if (item) item.completed = !item.completed;
   render();
@@ -313,8 +371,47 @@ function toggleChecklist(id, listId) {
 
 function toggleTask(id) {
   const item = appData.tasks.find(i => i.id === id);
-  if (item) item.completed = !item.completed;
+  if (item) {
+    item.completed = !item.completed;
+    if (item.completed) {
+      const now = new Date();
+      item.completedBy = item.assignee ? item.assignee.split(' ')[0] : "Staff";
+      item.completedAt = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    } else {
+      item.completedBy = "";
+      item.completedAt = "";
+    }
+  }
   render();
+}
+
+function deleteItem(type, id) {
+  if(!confirm("Are you sure you want to delete this?")) return;
+  
+  if (type === '86') appData.eightySix = appData.eightySix.filter(i => i.id !== id);
+  else if (type === 'special') appData.specials = appData.specials.filter(i => i.id !== id);
+  else if (type === 'opening') appData.opening = appData.opening.filter(i => i.id !== id);
+  else if (type === 'closing') appData.closing = appData.closing.filter(i => i.id !== id);
+  else if (type === 'task') appData.tasks = appData.tasks.filter(i => i.id !== id);
+  else if (type === 'staff') appData.staff = appData.staff.filter(i => i.id !== id);
+  
+  render();
+}
+
+function clear86() {
+  if(confirm("Clear the entire 86 board?")) { appData.eightySix = []; render(); }
+}
+
+function clearSpecials() {
+  if(confirm("Clear all specials?")) { appData.specials = []; render(); }
+}
+
+function resetChecklists() {
+  if(confirm("Uncheck all opening and closing tasks for the new day?")) {
+    appData.opening.forEach(i => i.completed = false);
+    appData.closing.forEach(i => i.completed = false);
+    render();
+  }
 }
 
 function toggleRole() {
@@ -331,15 +428,13 @@ function toggleRole() {
   }
 }
 
-function switchTab(tabId, el) {
+function switchTab(tabId, title, el) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   el.classList.add('active');
   
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
-
-  const titles = { dashboard: 'Shift Dashboard', checklists: 'Daily Checklists', tasks: 'Staff Assignments' };
-  document.getElementById('page-title').textContent = titles[tabId];
+  document.getElementById('page-title').textContent = title;
 }
 
 // --- MODAL LOGIC ---
@@ -350,6 +445,7 @@ function openModal(type) {
   const input1 = document.getElementById('modal-input-1');
   const input2 = document.getElementById('modal-input-2');
   const assigneeBox = document.getElementById('assignee-container');
+  const assigneeSelect = document.getElementById('modal-assignee');
 
   input1.value = '';
   input2.value = '';
@@ -358,17 +454,36 @@ function openModal(type) {
     title.textContent = "Mark Item 86'd";
     input1.placeholder = "Item Name (e.g., Oysters)";
     input2.placeholder = "Reason (e.g., Ran out)";
+    input2.style.display = 'block';
     assigneeBox.style.display = 'none';
   } else if (type === 'special') {
     title.textContent = "Add Special";
     input1.placeholder = "Special Name";
     input2.placeholder = "Description";
+    input2.style.display = 'block';
+    assigneeBox.style.display = 'none';
+  } else if (type === 'opening' || type === 'closing') {
+    title.textContent = "Add Checklist Item";
+    input1.placeholder = "Task description";
+    input2.style.display = 'none';
     assigneeBox.style.display = 'none';
   } else if (type === 'task') {
     title.textContent = "Assign Task";
     input1.placeholder = "Task Description";
     input2.style.display = 'none';
     assigneeBox.style.display = 'block';
+    
+    // Populate assignees
+    assigneeSelect.innerHTML = '<option value="">Unassigned</option>';
+    appData.staff.forEach(s => {
+      assigneeSelect.innerHTML += `<option value="${s.name}">${s.name} (${s.role})</option>`;
+    });
+  } else if (type === 'staff') {
+    title.textContent = "Add Employee";
+    input1.placeholder = "First Name";
+    input2.placeholder = "Role (e.g., Server, Host)";
+    input2.style.display = 'block';
+    assigneeBox.style.display = 'none';
   }
 
   modal.classList.add('active');
@@ -376,7 +491,6 @@ function openModal(type) {
 
 function closeModal() {
   document.getElementById('modal').classList.remove('active');
-  document.getElementById('modal-input-2').style.display = 'block'; // reset
 }
 
 function saveModal() {
@@ -384,7 +498,7 @@ function saveModal() {
   const val2 = document.getElementById('modal-input-2').value;
   const assignee = document.getElementById('modal-assignee').value;
   
-  if (!val1) return; // Basic validation
+  if (!val1) return; 
 
   const now = new Date();
   const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
@@ -393,8 +507,14 @@ function saveModal() {
     appData.eightySix.push({ id: Date.now(), name: val1, detail: val2 || "Out of stock", time: timeString });
   } else if (currentModalType === 'special') {
     appData.specials.push({ id: Date.now(), name: val1, detail: val2 });
+  } else if (currentModalType === 'opening') {
+    appData.opening.push({ id: Date.now(), text: val1, completed: false });
+  } else if (currentModalType === 'closing') {
+    appData.closing.push({ id: Date.now(), text: val1, completed: false });
   } else if (currentModalType === 'task') {
-    appData.tasks.push({ id: Date.now(), text: val1, assignee: assignee, completed: false });
+    appData.tasks.push({ id: Date.now(), text: val1, assignee: assignee, completed: false, completedBy: "", completedAt: "" });
+  } else if (currentModalType === 'staff') {
+    appData.staff.push({ id: Date.now(), name: val1, role: val2 || "Staff" });
   }
 
   closeModal();
